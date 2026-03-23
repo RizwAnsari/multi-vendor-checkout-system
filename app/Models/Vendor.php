@@ -41,6 +41,11 @@ class Vendor extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
     /**
      * Scope a query to only include active vendors.
      */
