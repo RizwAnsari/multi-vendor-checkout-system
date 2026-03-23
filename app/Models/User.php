@@ -3,10 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
+use App\Models\Vendor;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -45,5 +46,28 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the vendor associated with the user.
+     */
+    public function vendor()
+    {
+        return $this->hasOne(Vendor::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isVendor(): bool
+    {
+        return $this->role === 'vendor';
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->role === 'customer';
     }
 }

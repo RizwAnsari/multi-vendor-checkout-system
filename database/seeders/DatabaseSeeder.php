@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Vendor;
+use App\Models\Product;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +17,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create 5 vendors, each with 10 products
+        Vendor::factory(5)
+            ->has(Product::factory()->count(10))
+            ->create();
 
+        // Create an admin user for testing
+        User::factory()->admin()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+        ]);
+
+        // Create a test customer
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Test Customer',
+            'email' => 'customer@example.com',
         ]);
     }
 }
