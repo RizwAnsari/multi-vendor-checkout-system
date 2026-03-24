@@ -84,8 +84,8 @@ class CartService
             })->filter();
         }
 
-        // Group by vendor_id for uniqueness
-        return $items->groupBy(fn($item) => $item->product->vendor->name);
+        // Group by vendor_id to avoid name collisions
+        return $items->groupBy(fn($item) => $item->product->vendor_id);
     }
 
     /**
