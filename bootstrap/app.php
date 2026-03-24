@@ -19,13 +19,18 @@ return Application::configure(basePath: dirname(__DIR__))
 
             Route::middleware('web')
                 ->group(base_path('routes/checkout.php'));
+
+            Route::middleware(['web', 'auth', 'admin'])
+                ->group(base_path('routes/admin.php'));
         },
     )
     ->withEvents(discover: [
         __DIR__ . '/../app/Listeners',
     ])
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
