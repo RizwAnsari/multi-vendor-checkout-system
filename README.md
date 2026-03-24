@@ -4,6 +4,17 @@ A production-grade, modular, and scalable multi-vendor e-commerce checkout syste
 
 ---
 
+## Live Demo
+
+**[https://order-engine.rizwansari.com](https://order-engine.rizwansari.com)**
+
+| Role         | Email                  | Password   |
+| ------------ | ---------------------- | ---------- |
+| **Admin**    | `admin@example.com`    | `password` |
+| **Customer** | `customer@example.com` | `password` |
+
+---
+
 ## Key Features
 
 | Feature                             | Implementation                                                                                                 |
