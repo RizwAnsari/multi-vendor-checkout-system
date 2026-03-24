@@ -17,10 +17,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create 5 vendors, each with 10 products
-        Vendor::factory(5)
-            ->has(Product::factory()->count(10))
-            ->create();
+        // Create 3 vendors first
+        $vendors = Vendor::factory(3)->create();
+
+        // Create 9 products assigned to random vendors from the pool
+        Product::factory(9)->create([
+            'vendor_id' => fn() => $vendors->random()->id,
+        ]);
 
         // Create an admin user for testing
         User::factory()->admin()->create([

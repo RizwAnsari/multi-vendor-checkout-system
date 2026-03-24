@@ -14,7 +14,6 @@ class ProductService
     {
         return Product::active()
             ->with('vendor')
-            ->inRandomOrder()
             ->paginate($perPage);
     }
 }
