@@ -65,6 +65,18 @@ class CartService
     }
 
     /**
+     * Clear all items from the cart.
+     */
+    public function clear(?User $user): void
+    {
+        if ($user?->cart) {
+            $user->cart->items()->delete();
+        } else {
+            session()->forget('cart');
+        }
+    }
+
+    /**
      * Get grouped items (Merged or separate).
      */
     public function getGroupedItems(?User $user): Collection
@@ -141,10 +153,13 @@ class CartService
             $cart = Cart::firstOrCreate(['user_id' => $user->id]);
             $item = $cart->items()->where('product_id', $product->id)->first();
 
+            $newQuantity = $item ? ($item->quantity + $quantity) : $quantity;
+            $finalQuantity = min($newQuantity, $product->stock);
+
             if ($item) {
-                $item->increment('quantity', $quantity);
+                $item->update(['quantity' => $finalQuantity]);
             } else {
-                $cart->items()->create(['product_id' => $product->id, 'quantity' => $quantity]);
+                $cart->items()->create(['product_id' => $product->id, 'quantity' => $finalQuantity]);
             }
         });
     }
@@ -156,14 +171,13 @@ class CartService
     {
         $cart = session()->get('cart', []);
 
-        if (isset($cart[$product->id])) {
-            $cart[$product->id]['quantity'] += $quantity;
-        } else {
-            $cart[$product->id] = [
-                'quantity' => $quantity,
-                'price' => $product->price,
-            ];
-        }
+        $newQuantity = isset($cart[$product->id]) ? ($cart[$product->id]['quantity'] + $quantity) : $quantity;
+        $finalQuantity = min($newQuantity, $product->stock);
+
+        $cart[$product->id] = [
+            'quantity' => $finalQuantity,
+            'price' => $product->price,
+        ];
 
         session()->put('cart', $cart);
     }
