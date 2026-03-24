@@ -3,10 +3,6 @@
 use App\Models\Customer\Cart;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\CartController;
-use App\Http\Controllers\Customer\ProductController;
-
-// Product Routes
-Route::get('/', [ProductController::class, 'index'])->name('products.index');
 
 // Cart Routes
 Route::prefix('cart')

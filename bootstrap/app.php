@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: function () {
             Route::middleware('web')
-                ->group(base_path('routes/customer.php'));
+                ->group(base_path('routes/product.php'));
+
+            Route::middleware('web')
+                ->group(base_path('routes/cart.php'));
         },
     )
     ->withEvents(discover: [
