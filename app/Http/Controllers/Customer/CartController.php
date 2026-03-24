@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Customer;
 
 use Illuminate\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Services\Customer\CartService;
@@ -48,12 +47,8 @@ class CartController extends Controller
         } catch (ModelNotFoundException $e) {
             return redirect()->back()->with('error', 'Product not found.');
         } catch (\Throwable $e) {
-            Log::error('Cart Add Item Error: ' . $e->getMessage(), [
-                'user_id' => $request->user()?->id,
-                'product_id' => $request->product_id,
-                'exception' => $e
-            ]);
-            return redirect()->back()->with('error', 'Something went wrong, please try again later.');
+            _log_exception('Cart Add Item Error', $e, ['product_id' => $request->product_id]);
+            return redirect()->back()->with('error', config('shop.error_message'));
         }
     }
 
@@ -75,12 +70,8 @@ class CartController extends Controller
         } catch (ModelNotFoundException $e) {
             return redirect()->back()->with('error', 'Product not found or inactive.');
         } catch (\Throwable $e) {
-            Log::error('Cart Update Quantity Error: ' . $e->getMessage(), [
-                'user_id' => $request->user()?->id,
-                'product_id' => $productId,
-                'exception' => $e
-            ]);
-            return redirect()->back()->with('error', 'Something went wrong, please try again later.');
+            _log_exception('Cart Update Quantity Error', $e, ['product_id' => $productId]);
+            return redirect()->back()->with('error', config('shop.error_message'));
         }
     }
 
@@ -93,12 +84,8 @@ class CartController extends Controller
             $this->cartService->removeItem($request->user(), $productId);
             return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
         } catch (\Throwable $e) {
-            Log::error('Cart Remove Item Error: ' . $e->getMessage(), [
-                'user_id' => $request->user()?->id,
-                'product_id' => $productId,
-                'exception' => $e
-            ]);
-            return redirect()->route('cart.index')->with('error', 'Something went wrong, please try again later.');
+            _log_exception('Cart Remove Item Error', $e, ['product_id' => $productId]);
+            return redirect()->route('cart.index')->with('error', config('shop.error_message'));
         }
     }
 }
