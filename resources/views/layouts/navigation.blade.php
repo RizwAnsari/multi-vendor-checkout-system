@@ -72,9 +72,10 @@
                         </x-slot>
                     </x-dropdown>
                 @else
-                    <div class="space-x-4">
+                    <div class="space-x-4 text-right">
                         <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Log in</a>
                         <a href="{{ route('register') }}" class="text-sm text-gray-700 underline">Register</a>
+                        <a href="{{ route('admin.orders.index') }}" class="text-sm text-gray-700 underline">Admin</a>
                     </div>
                 @endauth
             </div>
@@ -138,6 +139,9 @@
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('register')">
                         {{ __('Register') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.orders.index')">
+                        {{ __('Admin') }}
                     </x-responsive-nav-link>
                 </div>
             </div>
