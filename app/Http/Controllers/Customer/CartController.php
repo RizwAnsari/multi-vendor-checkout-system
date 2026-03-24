@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Services\Customer\CartService;
 use App\Http\Requests\AddToCartRequest;
+use App\Http\Requests\UpdateCartRequest;
 use App\Exceptions\InsufficientStockException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -55,7 +56,7 @@ class CartController extends Controller
     /**
      * Update item quantity.
      */
-    public function update(AddToCartRequest $request, int $productId): RedirectResponse
+    public function update(UpdateCartRequest $request, int $productId): RedirectResponse
     {
         try {
             $this->cartService->updateQuantity(

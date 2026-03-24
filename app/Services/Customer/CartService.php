@@ -29,6 +29,12 @@ class CartService
      */
     public function updateQuantity(?User $user, int $productId, int $quantity): void
     {
+        // If quantity is 0 or less, remove the item entirely
+        if ($quantity <= 0) {
+            $this->removeItem($user, $productId);
+            return;
+        }
+
         $product = Product::active()->findOrFail($productId);
         $this->validateStock($product, $quantity);
 
@@ -86,6 +92,21 @@ class CartService
 
         // Group by vendor_id to avoid name collisions
         return $items->groupBy(fn($item) => $item->product->vendor_id);
+    }
+
+    /**
+     * Get a simplified map of product IDs and their quantities.
+     */
+    public function getCartQuantities(?User $user): array
+    {
+        if ($user) {
+            return $user->cart
+                ? $user->cart->items()->pluck('quantity', 'product_id')->toArray()
+                : [];
+        }
+
+        $sessionCart = session()->get('cart', []);
+        return collect($sessionCart)->mapWithKeys(fn($details, $id) => [$id => $details['quantity']])->toArray();
     }
 
     /**

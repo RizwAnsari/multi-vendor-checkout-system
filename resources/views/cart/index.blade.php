@@ -7,6 +7,16 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if ($errors->any())
+                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <ul class="list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             @if (session('success'))
                 <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
                     role="alert">
@@ -15,7 +25,8 @@
             @endif
 
             @if (session('error'))
-                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                    role="alert">
                     <span class="block sm:inline">{{ session('error') }}</span>
                 </div>
             @endif
@@ -51,14 +62,39 @@
 
                                         <div class="flex items-center space-x-6">
                                             <form action="{{ route('cart.update', $item->product_id) }}" method="POST"
-                                                class="flex items-center space-x-2">
+                                                class="flex flex-col items-end">
                                                 @csrf
                                                 @method('PATCH')
-                                                <input type="number" name="quantity" value="{{ $item->quantity }}"
-                                                    min="1" max="{{ $item->product->stock }}"
-                                                    class="w-16 rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
-                                                <button type="submit"
-                                                    class="text-indigo-600 hover:text-indigo-900 text-sm font-bold uppercase tracking-wider">Update</button>
+                                                <input type="hidden" name="product_id"
+                                                    value="{{ $item->product_id }}">
+                                                <div
+                                                    class="flex items-center bg-gray-100 rounded-xl p-1 shadow-inner border border-gray-200">
+                                                    <button type="button"
+                                                        onclick="const input = this.parentNode.querySelector('input'); input.stepDown(); input.form.submit();"
+                                                        class="w-10 h-10 flex items-center justify-center text-indigo-600 hover:text-indigo-800 transition transform active:scale-95">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M20 12H4" />
+                                                        </svg>
+                                                    </button>
+
+                                                    <input type="number" name="quantity" value="{{ $item->quantity }}"
+                                                        min="0" max="{{ $item->product->stock }}"
+                                                        onchange="this.form.submit()"
+                                                        class="w-12 bg-transparent border-none text-center font-bold text-gray-800 focus:ring-0 p-0">
+
+                                                    <button type="button"
+                                                        onclick="const quantityInput = this.parentNode.querySelector('input[name=quantity]'); quantityInput.stepUp(); quantityInput.form.submit();"
+                                                        @disabled($item->quantity >= $item->product->stock)
+                                                        class="w-10 h-10 flex items-center justify-center text-indigo-600 hover:text-indigo-800 transition transform active:scale-95 disabled:opacity-25 disabled:cursor-not-allowed">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M12 4v16m8-8H4" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
                                             </form>
 
                                             <div class="text-right min-w-[120px]">
@@ -72,7 +108,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                    class="text-red-500 hover:text-red-700 transition">
+                                                    class="p-2 text-gray-400 hover:text-red-500 transition-colors">
                                                     <svg class="w-6 h-6" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"

@@ -7,6 +7,26 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if ($errors->any())
+                <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <ul class="list-disc list-inside text-sm font-medium">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @if (session('success'))
+                <div class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+                    role="alert">
+                    <span class="block sm:inline font-medium text-sm">{{ session('success') }}</span>
+                    <a href="{{ route('cart.index') }}"
+                        class="ml-2 font-bold underline hover:text-green-900 transition-colors text-sm">View Cart
+                        &rarr;</a>
+                </div>
+            @endif
+
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach ($products as $product)
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex flex-col">
@@ -35,24 +55,59 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="p-4 bg-gray-50 border-t border-gray-100 mt-auto">
+                        <div class="p-4 bg-gray-50 border-t border-gray-100 mt-auto text-center">
+                            @php
+                                $cartQty = $cartQuantities[$product->id] ?? 0;
+                                $isMaxed = $cartQty >= $product->stock;
+                            @endphp
+
                             @if ($product->stock > 0)
-                                <form action="{{ route('cart.store') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <div class="flex items-center space-x-2">
-                                        <input type="number" name="quantity" value="1" min="1"
-                                            max="{{ $product->stock }}"
-                                            class="w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
-                                        <button type="submit"
-                                            class="flex-grow bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition text-sm shadow-sm">
-                                            Add to Cart
-                                        </button>
+                                @if ($isMaxed)
+                                    <div
+                                        class="w-full h-10 flex items-center justify-center bg-indigo-50 text-indigo-700 font-black text-xs uppercase tracking-widest rounded-lg border border-indigo-100 shadow-inner">
+                                        Max Quantity in Cart
                                     </div>
-                                </form>
+                                @else
+                                    <form action="{{ route('cart.store') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <div class="flex items-center space-x-2">
+                                            <div
+                                                class="flex items-center bg-gray-100 rounded-lg p-1 border border-gray-200 shadow-sm h-10">
+                                                <button type="button"
+                                                    onclick="const quantityInput = this.parentNode.querySelector('input[type=number]'); quantityInput.stepDown();"
+                                                    class="w-8 h-8 flex items-center justify-center text-indigo-600 hover:text-indigo-800 transition transform active:scale-95">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M20 12H4" />
+                                                    </svg>
+                                                </button>
+
+                                                <input type="number" name="quantity" value="1" min="1"
+                                                    max="{{ $product->stock - $cartQty }}"
+                                                    class="w-10 bg-transparent border-none text-center font-bold text-gray-800 focus:ring-0 p-0 text-sm">
+
+                                                <button type="button"
+                                                    onclick="const quantityInput = this.parentNode.querySelector('input[type=number]'); quantityInput.stepUp();"
+                                                    class="w-8 h-8 flex items-center justify-center text-indigo-600 hover:text-indigo-800 transition transform active:scale-95">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M12 4v16m8-8H4" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <button type="submit"
+                                                class="flex-grow h-10 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 rounded-lg transition text-xs uppercase tracking-widest shadow-md hover:shadow-lg transform active:scale-95">
+                                                Add
+                                            </button>
+                                        </div>
+                                    </form>
+                                @endif
                             @else
                                 <div
-                                    class="w-full bg-gray-200 text-gray-500 font-bold py-2 px-4 rounded text-sm text-center cursor-not-allowed">
+                                    class="w-full bg-gray-200 text-gray-500 font-bold py-2 px-4 rounded-lg text-xs uppercase tracking-widest text-center cursor-not-allowed border border-gray-300">
                                     Unavailable
                                 </div>
                             @endif
@@ -65,5 +120,7 @@
                 {{ $products->links() }}
             </div>
         </div>
+    </div>
+    </div>
     </div>
 </x-app-layout>
