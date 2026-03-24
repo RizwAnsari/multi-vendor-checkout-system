@@ -6,18 +6,18 @@ A production-grade, modular, and scalable multi-vendor e-commerce checkout syste
 
 ## Key Features
 
-| Feature                             | Implementation                                                                                |
-| ----------------------------------- | --------------------------------------------------------------------------------------------- |
-| Multi-Vendor Cart & Checkout        | Items grouped by vendor, separate orders per vendor in one atomic transaction, stock tracking |
-| Guest & Authenticated Carts         | Session-based cart for guests, DB cart for users, auto-merge on login                         |
-| Inventory Race Condition Protection | Pessimistic locking via `lockForUpdate()` during checkout                                     |
-| Event-Driven Notifications          | `OrderPlaced` / `PaymentSucceeded` events with queued listeners                               |
-| Email Notifications                 | `OrderPlacedNotification` and `NewOrderVendorNotification` via mail                           |
-| Auto-Cancel Unpaid Orders           | Scheduled hourly command `orders:cancel-unpaid` with stock restoration                        |
-| Role-Based Access Control           | Admin, Vendor, Customer roles with Middleware + Policies                                      |
-| Admin Dashboard                     | Filterable order management panel                                                             |
-| Service Layer Architecture          | Business logic in `CartService`, `OrderService`, `ProductService`                             |
-| Form Request Validation             | `AddToCartRequest`, `UpdateCartRequest` with real-time stock validation                       |
+| Feature                             | Implementation                                                                                                 |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Multi-Vendor Cart & Checkout        | Items grouped by vendor, separate orders per vendor in one atomic transaction, stock tracking                  |
+| Guest & Authenticated Carts         | Session-based cart for guests, DB cart for users, auto-merge on login                                          |
+| Inventory Race Condition Protection | Pessimistic locking via `lockForUpdate()` during checkout                                                      |
+| Event-Driven Notifications          | `OrderPlaced` / `PaymentSucceeded` events with queued listeners                                                |
+| Email Notifications                 | `OrderPlacedNotification` and `NewOrderVendorNotification` via mail                                            |
+| Auto-Cancel Unpaid Orders           | Scheduled hourly command `orders:cancel-unpaid` with stock restoration                                         |
+| Role-Based Access Control           | Admin & Customer roles enforced via `AdminMiddleware` + `CartPolicy`; Vendor role modeled for future dashboard |
+| Admin Dashboard                     | Filterable order management panel                                                                              |
+| Service Layer Architecture          | Business logic in `CartService`, `OrderService`, `ProductService`                                              |
+| Form Request Validation             | `AddToCartRequest`, `UpdateCartRequest` with real-time stock validation                                        |
 
 ---
 
@@ -174,7 +174,7 @@ PaymentSucceeded Event
   └── GenerateOrderInvoice (logs invoice generation)
 ```
 
-All listeners implement `ShouldQueue` — notifications are processed in the background without blocking the checkout response.
+Notification listeners (`SendOrderConfirmation`, `NotifyVendorOfNewOrder`, `GenerateOrderInvoice`) implement `ShouldQueue` and run in the background without blocking the checkout response. `MergeCartOnLogin` runs synchronously by design — cart merge must complete before the login redirect.
 
 ### 5. Guest-to-User Cart Merge
 
