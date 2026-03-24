@@ -140,12 +140,12 @@
                                 <div class="text-4xl sm:text-5xl font-black">₹{{ number_format($grandTotal, 2) }}</div>
                                 <div class="mt-6">
                                     @auth
-                                        <button
-                                            class="w-full sm:w-auto bg-white text-indigo-600 hover:bg-indigo-50 font-black py-4 px-10 rounded-xl shadow-lg transition transform hover:-translate-y-1 uppercase tracking-widest text-sm">
+                                        <a href="{{ route('checkout.index') }}"
+                                            class="w-full sm:w-auto bg-white text-indigo-600 hover:bg-indigo-50 font-black py-4 px-10 rounded-xl shadow-lg transition transform hover:-translate-y-1 inline-block text-center uppercase tracking-widest text-sm">
                                             Proceed to Checkout
-                                        </button>
+                                        </a>
                                     @else
-                                        <a href="{{ route('login') }}"
+                                        <a href="{{ route('checkout.index') }}"
                                             class="w-full sm:w-auto bg-white text-indigo-600 hover:bg-indigo-50 font-black py-4 px-10 rounded-xl shadow-lg transition transform hover:-translate-y-1 inline-block text-center uppercase tracking-widest text-sm">
                                             Login to Checkout
                                         </a>
