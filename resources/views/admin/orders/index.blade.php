@@ -47,9 +47,9 @@
                                 class="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                 <option value="">All Statuses</option>
                                 @foreach ($statuses as $status)
-                                    <option value="{{ $status }}"
-                                        {{ request('status') == $status ? 'selected' : '' }}>
-                                        {{ ucfirst($status) }}
+                                    <option value="{{ $status->value }}"
+                                        {{ request('status') == $status->value ? 'selected' : '' }}>
+                                        {{ $status->label() }}
                                     </option>
                                 @endforeach
                             </select>
@@ -96,11 +96,11 @@
                                     <td class="py-4 px-6">
                                         <span
                                             class="px-2 py-1 text-xs font-semibold rounded-full 
-                                            @if ($order->status == 'pending') bg-yellow-100 text-yellow-800 
-                                            @elseif($order->status == 'confirmed') bg-green-100 text-green-800
-                                            @elseif($order->status == 'cancelled') bg-red-100 text-red-800
+                                            @if ($order->status === \App\Enums\OrderStatus::PENDING) bg-yellow-100 text-yellow-800 
+                                            @elseif($order->status === \App\Enums\OrderStatus::CONFIRMED) bg-green-100 text-green-800
+                                            @elseif($order->status === \App\Enums\OrderStatus::CANCELLED) bg-red-100 text-red-800
                                             @else bg-blue-100 text-blue-800 @endif">
-                                            {{ ucfirst($order->status) }}
+                                            {{ $order->status->label() }}
                                         </span>
                                     </td>
                                     <td class="py-4 px-6 text-xs text-gray-400">

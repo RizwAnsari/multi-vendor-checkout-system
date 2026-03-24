@@ -4,6 +4,8 @@ namespace App\Services\Admin;
 
 use App\Models\User;
 use App\Models\Vendor;
+use App\Enums\UserRole;
+use App\Enums\OrderStatus;
 use App\Models\Customer\Order;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -30,8 +32,8 @@ class OrderService
     {
         return [
             'vendors' => Vendor::orderBy('name')->get(),
-            'customers' => User::where('role', 'customer')->orderBy('name')->get(),
-            'statuses' => ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'],
+            'customers' => User::where('role', UserRole::CUSTOMER)->orderBy('name')->get(),
+            'statuses' => OrderStatus::cases(),
         ];
     }
 

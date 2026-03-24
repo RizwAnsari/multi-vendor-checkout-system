@@ -4,6 +4,7 @@ namespace App\Models\Customer;
 
 use App\Models\User;
 use App\Models\Vendor;
+use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,6 +17,7 @@ class Order extends Model
 
     protected $casts = [
         'subtotal' => 'decimal:2',
+        'status' => OrderStatus::class,
     ];
 
     public function user()

@@ -4,6 +4,8 @@ namespace App\Services\Customer;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Models\Customer\Order;
 use App\Models\Customer\Payment;
 use App\Models\Customer\OrderItem;
@@ -47,7 +49,7 @@ class OrderService
                     'user_id' => $user?->id,
                     'vendor_id' => $vendorId,
                     'subtotal' => $subtotal,
-                    'status' => 'pending',
+                    'status' => OrderStatus::PENDING,
                 ]);
 
                 // 3. Process each item (Stock + OrderItem)
@@ -103,11 +105,11 @@ class OrderService
         Payment::create([
             'order_id' => $order->id,
             'amount' => $order->subtotal,
-            'status' => 'paid',
+            'status' => PaymentStatus::PAID,
             'transaction_ref' => 'SIM-' . strtoupper(bin2hex(random_bytes(6))),
             'paid_at' => now(),
         ]);
 
-        $order->update(['status' => 'confirmed']);
+        $order->update(['status' => OrderStatus::CONFIRMED]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Vendor;
+use App\Enums\UserRole;
 use App\Models\Customer\Cart;
 use App\Models\Customer\Order;
 use Illuminate\Notifications\Notifiable;
@@ -47,6 +48,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => UserRole::class,
         ];
     }
 
@@ -60,17 +62,17 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role === UserRole::ADMIN;
     }
 
     public function isVendor(): bool
     {
-        return $this->role === 'vendor';
+        return $this->role === UserRole::VENDOR;
     }
 
     public function isCustomer(): bool
     {
-        return $this->role === 'customer';
+        return $this->role === UserRole::CUSTOMER;
     }
 
     public function cart()

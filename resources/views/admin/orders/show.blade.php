@@ -64,7 +64,8 @@
                                 </div>
                                 <div>
                                     <p class="text-gray-400">Status</p>
-                                    <p class="font-semibold text-green-600 uppercase">{{ $order->payment->status }}</p>
+                                    <p class="font-semibold text-green-600 uppercase">
+                                        {{ $order->payment->status->label() }}</p>
                                 </div>
                                 <div>
                                     <p class="text-gray-400">Amount Paid</p>
@@ -89,11 +90,11 @@
                         <div class="flex items-center gap-2 mb-4">
                             <span
                                 class="px-3 py-1 text-sm font-semibold rounded-full 
-                                @if ($order->status == 'pending') bg-yellow-100 text-yellow-800 
-                                @elseif($order->status == 'confirmed') bg-green-100 text-green-800
-                                @elseif($order->status == 'cancelled') bg-red-100 text-red-800
+                                @if ($order->status === \App\Enums\OrderStatus::PENDING) bg-yellow-100 text-yellow-800 
+                                @elseif($order->status === \App\Enums\OrderStatus::CONFIRMED) bg-green-100 text-green-800
+                                @elseif($order->status === \App\Enums\OrderStatus::CANCELLED) bg-red-100 text-red-800
                                 @else bg-blue-100 text-blue-800 @endif">
-                                {{ strtoupper($order->status) }}
+                                {{ strtoupper($order->status->value) }}
                             </span>
                         </div>
                         <p class="text-xs text-gray-400 italic">Ordered at:
