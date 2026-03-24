@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Vendor;
 use App\Models\Product;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -25,7 +26,7 @@ class ProductFactory extends Factory
             'price' => $this->faker->randomFloat(2, 10, 1000),
             'stock' => $this->faker->numberBetween(0, 50),
             'is_active' => true,
-            'image' => "https://picsum.photos/640/480?random={$this->faker->unique()->numberBetween(1, 1000)}",
+            'image' => 'https://picsum.photos/seed/' . Str::random(10) . '/400/400',
         ];
     }
 }

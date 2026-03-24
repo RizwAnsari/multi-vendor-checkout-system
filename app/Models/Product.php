@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Vendor;
+use App\Models\Customer\CartItem;
+use App\Models\Customer\OrderItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
