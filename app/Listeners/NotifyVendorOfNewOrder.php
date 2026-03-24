@@ -3,9 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\OrderPlaced;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Notifications\NewOrderVendorNotification;
 
 class NotifyVendorOfNewOrder implements ShouldQueue
 {
@@ -19,6 +19,8 @@ class NotifyVendorOfNewOrder implements ShouldQueue
         $order = $event->order;
         $vendor = $order->vendor;
 
-        Log::info("New Order Notification sent to vendor: {$vendor?->name} for Order #{$order->id}");
+        if ($vendor && $vendor->user) {
+            $vendor->user->notify(new NewOrderVendorNotification($order));
+        }
     }
 }

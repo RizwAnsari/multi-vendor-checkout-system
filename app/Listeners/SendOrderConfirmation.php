@@ -3,9 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\OrderPlaced;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Notifications\OrderPlacedNotification;
 
 class SendOrderConfirmation implements ShouldQueue
 {
@@ -19,6 +19,8 @@ class SendOrderConfirmation implements ShouldQueue
         $order = $event->order;
         $user = $order->user;
 
-        Log::info("Order Confirmation Email sent to customer: {$user?->email} for Order #{$order->id}");
+        if ($user) {
+            $user->notify(new OrderPlacedNotification($order));
+        }
     }
 }
