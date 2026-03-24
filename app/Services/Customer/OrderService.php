@@ -5,8 +5,10 @@ namespace App\Services\Customer;
 use App\Models\User;
 use App\Models\Product;
 use App\Enums\OrderStatus;
+use App\Events\OrderPlaced;
 use App\Enums\PaymentStatus;
 use App\Models\Customer\Order;
+use App\Events\PaymentSucceeded;
 use App\Models\Customer\Payment;
 use App\Models\Customer\OrderItem;
 use Illuminate\Support\Collection;
@@ -60,6 +62,9 @@ class OrderService
                 // 4. Create Simulated Payment
                 $this->createSimulatedPayment($order);
 
+                // Dispatch OrderPlaced Event
+                event(new OrderPlaced($order));
+
                 $createdOrders->push($order);
             }
 
@@ -102,13 +107,16 @@ class OrderService
      */
     protected function createSimulatedPayment(Order $order): void
     {
-        Payment::create([
+        $payment = Payment::create([
             'order_id' => $order->id,
             'amount' => $order->subtotal,
             'status' => PaymentStatus::PAID,
             'transaction_ref' => 'PAY-' . strtoupper(bin2hex(random_bytes(6))),
             'paid_at' => now(),
         ]);
+
+        // Dispatch PaymentSucceeded Event
+        event(new PaymentSucceeded($payment));
 
         $order->update(['status' => OrderStatus::CONFIRMED]);
     }
