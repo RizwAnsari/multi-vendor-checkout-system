@@ -77,6 +77,18 @@ class CartService
     }
 
     /**
+     * Check if the cart is currently empty.
+     */
+    public function isEmpty(?User $user): bool
+    {
+        if ($user) {
+            return !$user->cart || $user->cart->items()->count() === 0;
+        }
+
+        return empty(session()->get('cart', []));
+    }
+
+    /**
      * Get grouped items (Merged or separate).
      */
     public function getGroupedItems(?User $user): Collection
@@ -187,7 +199,7 @@ class CartService
      */
     protected function validateStock(Product $product, int $quantity): void
     {
-        if ($quantity > $product->stock) {
+        if ($product->isOutOfStock($quantity)) {
             throw new InsufficientStockException("Insufficient stock for {$product->name}. Only {$product->stock} available.");
         }
     }

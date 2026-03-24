@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
             Route::middleware('web')
                 ->group(base_path('routes/cart.php'));
+
+            Route::middleware('web')
+                ->group(base_path('routes/checkout.php'));
         },
     )
     ->withEvents(discover: [

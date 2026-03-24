@@ -39,7 +39,7 @@ class AddToCartRequest extends FormRequest
                         $existingQuantity = $sessionCart[$productId]['quantity'] ?? 0;
                     }
 
-                    if (($existingQuantity + $value) > $product->stock) {
+                    if ($product->isOutOfStock($existingQuantity + $value)) {
                         $remaining = max(0, $product->stock - $existingQuantity);
                         $message = "You already have {$existingQuantity} in your cart. ";
                         $message .= $remaining > 0

@@ -25,7 +25,7 @@ class UpdateCartRequest extends FormRequest
 
                     if (!$product) return;
 
-                    if ($value > $product->stock) {
+                    if ($product->isOutOfStock($value)) {
                         $fail("The requested quantity exceeds available stock ({$product->stock}).");
                     }
                 },

@@ -64,4 +64,23 @@ class Product extends Model
     {
         return $query->where('stock', '>', 0);
     }
+
+    /**
+     * Check if a specific quantity is in stock.
+     * If quantity is null, checks if at least one unit is available.
+     */
+    public function isInStock(?int $quantity = null): bool
+    {
+        return $quantity === null ? $this->stock > 0 : $this->stock >= $quantity;
+    }
+
+    /**
+     * Check if the product is out of stock.
+     * If quantity is provided, checks if stock is insufficient for that quantity.
+     * If quantity is null, checks for absolute zero stock.
+     */
+    public function isOutOfStock(?int $quantity = null): bool
+    {
+        return $quantity === null ? $this->stock <= 0 : $this->stock < $quantity;
+    }
 }

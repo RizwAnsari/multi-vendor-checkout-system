@@ -58,10 +58,10 @@
                         <div class="p-4 bg-gray-50 border-t border-gray-100 mt-auto text-center">
                             @php
                                 $cartQty = $cartQuantities[$product->id] ?? 0;
-                                $isMaxed = $cartQty >= $product->stock;
+                                $isMaxed = $product->isOutOfStock($cartQty + 1);
                             @endphp
 
-                            @if ($product->stock > 0)
+                            @if ($product->isInStock())
                                 @if ($isMaxed)
                                     <div
                                         class="w-full h-10 flex items-center justify-center bg-indigo-50 text-indigo-700 font-black text-xs uppercase tracking-widest rounded-lg border border-indigo-100 shadow-inner">

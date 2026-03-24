@@ -86,7 +86,7 @@
 
                                                     <button type="button"
                                                         onclick="const quantityInput = this.parentNode.querySelector('input[name=quantity]'); quantityInput.stepUp(); quantityInput.form.submit();"
-                                                        @disabled($item->quantity >= $item->product->stock)
+                                                        @disabled($item->product->isOutOfStock($item->quantity + 1))
                                                         class="w-10 h-10 flex items-center justify-center text-indigo-600 hover:text-indigo-800 transition transform active:scale-95 disabled:opacity-25 disabled:cursor-not-allowed">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                             viewBox="0 0 24 24">
