@@ -29,7 +29,7 @@
                     <div class="flex flex-wrap justify-center gap-2">
                         @foreach (session('order_ids', []) as $id)
                             <span
-                                class="bg-indigo-600 text-white font-bold px-3 py-1 rounded-lg text-xs shadow-md">#{{ $id }}</span>
+                                class="bg-indigo-600 text-white font-bold px-3 py-1 rounded-lg text-xs shadow-md">ORD#{{ $id }}</span>
                         @endforeach
                     </div>
                 </div>
