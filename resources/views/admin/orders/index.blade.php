@@ -55,7 +55,7 @@
                             </select>
                         </div>
 
-                        <div class="flex gap-2">
+                        <div class="flex gap-2 justify-end">
                             <button type="submit"
                                 class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
                                 {{ __('Filter') }}
@@ -86,13 +86,13 @@
                             @forelse($orders as $order)
                                 <tr class="bg-white border-b hover:bg-gray-50 transition-colors">
                                     <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
-                                        #{{ $order->id }}</td>
+                                        ORD#{{ $order->id }}</td>
                                     <td class="py-4 px-6">
                                         {{ $order->user->name }}<br>
                                         <span class="text-xs italic">{{ $order->user->email }}</span>
                                     </td>
                                     <td class="py-4 px-6">{{ $order->vendor->name }}</td>
-                                    <td class="py-4 px-6 font-semibold">${{ number_format($order->subtotal, 2) }}</td>
+                                    <td class="py-4 px-6 font-semibold">₹{{ number_format($order->subtotal, 2) }}</td>
                                     <td class="py-4 px-6">
                                         <span
                                             class="px-2 py-1 text-xs font-semibold rounded-full 

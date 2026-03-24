@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Order Details') }} #{{ $order->id }}
+                {{ __('Order Details') }} ORD#{{ $order->id }}
             </h2>
             <a href="{{ route('admin.orders.index') }}" class="text-sm text-indigo-600 hover:text-indigo-900">
                 &larr; Back to Orders
@@ -36,9 +36,9 @@
                                                 <span class="text-xs text-gray-400">ID: {{ $item->product_id }}</span>
                                             </td>
                                             <td class="py-4 px-4">{{ $item->quantity }}</td>
-                                            <td class="py-4 px-4">${{ number_format($item->unit_price, 2) }}</td>
+                                            <td class="py-4 px-4">₹{{ number_format($item->unit_price, 2) }}</td>
                                             <td class="py-4 px-4 text-right font-semibold">
-                                                ${{ number_format($item->line_total, 2) }}</td>
+                                                ₹{{ number_format($item->line_total, 2) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -46,7 +46,7 @@
                                     <tr class="bg-gray-50 font-bold text-gray-900 border-t-2 border-gray-100">
                                         <td colspan="3" class="py-4 px-4 text-right">SUBTOTAL</td>
                                         <td class="py-4 px-4 text-right text-indigo-600 text-lg">
-                                            ${{ number_format($order->subtotal, 2) }}</td>
+                                            ₹{{ number_format($order->subtotal, 2) }}</td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -69,7 +69,7 @@
                                 </div>
                                 <div>
                                     <p class="text-gray-400">Amount Paid</p>
-                                    <p class="font-semibold">${{ number_format($order->payment->amount, 2) }}</p>
+                                    <p class="font-semibold">₹{{ number_format($order->payment->amount, 2) }}</p>
                                 </div>
                                 <div>
                                     <p class="text-gray-400">Paid At</p>

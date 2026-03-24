@@ -106,7 +106,7 @@ class OrderService
             'order_id' => $order->id,
             'amount' => $order->subtotal,
             'status' => PaymentStatus::PAID,
-            'transaction_ref' => 'SIM-' . strtoupper(bin2hex(random_bytes(6))),
+            'transaction_ref' => 'PAY-' . strtoupper(bin2hex(random_bytes(6))),
             'paid_at' => now(),
         ]);
 
